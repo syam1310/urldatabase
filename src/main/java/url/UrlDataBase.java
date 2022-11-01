@@ -23,7 +23,7 @@ public class UrlDataBase {
                 case "get":
                     int urlId = service.getUrlId(inputCmd[1]);
                     if(urlId==-1){
-                        System.out.println("This url is not registered: " + urlId);
+                        System.out.println("This url is not registered: " +inputCmd[1]);
                     }else{
                         System.out.println("Unique short key: " + urlId);
                     }
