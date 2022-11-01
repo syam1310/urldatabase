@@ -5,12 +5,19 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.util.*;
 
+/**
+ * this class will handle all the operation on url
+ */
 public class UrlDatabaseService {
     int urlPrimaryKey;
 
     Map<String, UrlNode> urlDetailsMap = new HashMap<>();
 
+    /*
+    this method will add the provided url to hashmap and return the short id
+     */
     public int storeUrl(String url) {
+        //this method will generate the uniques id for URL resource
        int id= generateNextId();
         UrlNode node = new UrlNode();
         node.setUrl(url);
@@ -20,6 +27,11 @@ public class UrlDatabaseService {
         return id;
     }
 
+    /**
+     * this method will return the url id after incrementing the usages count
+     * @param url
+     * @return
+     */
     public int getUrlId(String url) {
         if(urlDetailsMap.containsKey(url)) {
             UrlNode urlNode = urlDetailsMap.get(url);
@@ -29,6 +41,11 @@ public class UrlDatabaseService {
         return -1;
     }
 
+    /**
+     * return the usages count for provided url
+     * @param url
+     * @return
+     */
     public int getUrlUsagesCount(String url) {
         if(urlDetailsMap.containsKey(url)) {
             UrlNode urlNode = urlDetailsMap.get(url);
@@ -37,21 +54,16 @@ public class UrlDatabaseService {
         return 0;
     }
 
+    /**
+     * it will return all available url resoruces in our in-memory database
+     * @return
+     */
     public String getList() {
      Collection<UrlNode> collection= urlDetailsMap.values();
 
-     List<UrlNode> response= new ArrayList<>();
-     for(UrlNode urlNode: collection){
-         UrlNode temp= new UrlNode();
-         temp.setUrl(urlNode.getUrl());
-         temp.setUsagesCount(urlNode.getUsagesCount());
-         response.add(temp);
-     }
-
         ObjectMapper mapper = new ObjectMapper();
-       // mapper.disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
         try {
-            return mapper.writeValueAsString(response);
+            return mapper.writeValueAsString(collection);
         } catch(JsonProcessingException e) {
             throw new RuntimeException(e);
         }
